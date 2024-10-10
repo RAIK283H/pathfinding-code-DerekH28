@@ -68,7 +68,7 @@ class Graph:
                 self.graph_line_coordinates.append((start_x, start_y, end_x, end_y))
                 line = pyglet.shapes.Line(start_x, start_y, end_x, end_y,
                                           color=colors.WHITE[colors.SHAPE_INDEX],
-                                          width=3, batch=self.batch, group=self.group1)
+                                          batch=self.batch, group=self.group1)
                 self.graph_lines.append(line)
         # Draw graph points and add lables for each vertex
         for index, graph_point in enumerate(graph_data.graph_data[global_game_data.current_graph_index]):
