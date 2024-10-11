@@ -3,6 +3,7 @@ import global_game_data
 from numpy import random
 from collections import deque
 
+
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
     global_game_data.graph_paths.append(get_test_path())
@@ -16,9 +17,9 @@ def get_test_path():
     return graph_data.test_path[global_game_data.current_graph_index]
 
 
-def get_random_path(graph_index):
+def get_random_path():
     assert graph_data.graph_data, "graph is empty"
-    graph = graph_data.graph_data[graph_index]
+    graph = graph_data.graph_data[random.rand(0, 6)]
 
     start_node = 0
     exit_node = len(graph) - 1
@@ -39,8 +40,8 @@ def get_random_path(graph_index):
     return path
 
 
-def get_dfs_path(graph_index):
-    graph = graph_data.graph_data[graph_index]
+def get_dfs_path():
+    graph = graph_data.graph_data[random.rand(0, 6)]
     start_node = 0
     exit_node = len(graph) - 1
 
@@ -57,8 +58,8 @@ def get_dfs_path(graph_index):
     return dfs(start_node, [start_node])
 
 
-def get_bfs_path(graph_index):
-    graph = graph_data.graph_data[graph_index]
+def get_bfs_path():
+    graph = graph_data.graph_data[random.rand(0, 6)]
     start_node = 0
     exit_node = len(graph) - 1
     queue = deque([[start_node]])
@@ -81,8 +82,8 @@ def get_bfs_path(graph_index):
     return None
 
 
-def get_dijkstra_path(graph_index):
-    graph = graph_data.graph_data[graph_index]
+def get_dijkstra_path():
+    graph = graph_data.graph_data[random.rand(0, 6)]
     start_node = 0
     exit_node = len(graph) - 1
 
