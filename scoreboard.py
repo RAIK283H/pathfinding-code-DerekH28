@@ -86,8 +86,8 @@ def update_elements_locations(self):
 
 
 def update_paths(self):
-        for index in range(len(config_data.player_data)):
-            self.player_path_display[index][0].text = self.wrap_text(str(global_game_data.graph_paths[index]))
+    for index in range(len(config_data.player_data)):
+        self.player_path_display[index][0].text = self.wrap_text(str(global_game_data.graph_paths[index]))
 
     def update_distance_to_exit(self):
         start_x = graph_data.graph_data[global_game_data.current_graph_index][0][0][0]
@@ -98,8 +98,8 @@ def update_paths(self):
         self.distance_to_exit_label.text = 'Direct Distance To Exit : ' + "{0:.0f}".format(self.distance_to_exit)
 
     def wrap_text(self, input):
-    wrapped_text = (input[:44] + ', ...]') if len(input) > 44 else input
-        return wrapped_text
+     wrapped_text = (input[:44] + ', ...]') if len(input) > 44 else input
+     return wrapped_text
 
     def update_distance_traveled(self):
         for display_element, player_configuration_info in self.player_traveled_display:
