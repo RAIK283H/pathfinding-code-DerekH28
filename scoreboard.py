@@ -12,6 +12,7 @@ class Scoreboard:
     player_excess_distance_display = []
     player_path_display = []
     player_objectives_display = []
+    winner_display = None
 
     def __init__(self, batch, group):
         self.batch = batch
@@ -117,9 +118,23 @@ class Scoreboard:
                 if player_object.player_config_data == player_configuration_info:
                     display_element.text = "Objectives Reached: " + str(player_object.objectives_reached)
 
+    def determine_winner(self):
+        min_distance = float('inf')
+        winner_name = None
+
+        for player_object in global_game_data.player_objects:
+            if player_object.is_test_player:  # Skip the test player
+                continue
+            total_distance = player_object.distance_traveled
+            if total_distance < min_distance:
+                min_distance = total_distance
+                winner_name = player_object.player_config_data[0]  # Get player name
+
+        self.winner_display.text = f"Winner: {winner_name} with {min_distance:.0f} distance"
     def update_scoreboard(self):
         self.update_elements_locations()
         self.update_paths()
         self.update_distance_to_exit()
         self.update_distance_traveled()
         self.update_objectives_reached()
+        self.determine_winner()

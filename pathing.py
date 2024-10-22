@@ -45,9 +45,12 @@ def get_dfs_path():
     start_node = 0
     exit_node = len(graph) - 1
 
+    # helper function in order to facilitate dfs
     def dfs(current, path):
+        # base case if path is length 1 or start is the same as exit
         if current == exit_node:
             return path
+        # search through all neighbors
         for neighbor in graph[current][1]:
             if neighbor not in path:
                 result = dfs(neighbor, path + [neighbor])
@@ -56,16 +59,13 @@ def get_dfs_path():
         return None
 
     path_to_target = dfs(start_node, [start_node])
-    if not path_to_target or path_to_target[-1] != global_game_data.target_node:
-        return None  # No valid path to target
 
-    path_to_exit = dfs(global_game_data.target_node, [global_game_data.target_node])
-    if not path_to_exit or path_to_exit[-1] != exit_node:
-        return None
-
-    full_path = path_to_target[:-1] + path_to_exit
+    full_path = path_to_target
+    # assert post condition that target node is hit during full path
     assert global_game_data.target_node in full_path, "failed"
+    # assert post condition that they hit exit as the last node
     assert full_path[-1] == exit_node, "failed"
+    # for loop to make sure each node hit are neighbors.
     for i in range(len(full_path) - 1):
         current_node = full_path[i]
         next_node = full_path[i + 1]
@@ -134,8 +134,6 @@ def get_bfs_path():
             1], f" failed:{current_node}{next_node}."
 
     return full_path
-
-
 
 
 def get_dijkstra_path():
