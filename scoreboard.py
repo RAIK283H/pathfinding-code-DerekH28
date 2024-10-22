@@ -64,7 +64,7 @@ class Scoreboard:
                                                          color=player[2][colors.TEXT_INDEX])
             self.player_objectives_display.append((objectives_reached_label, player))
 
-def update_elements_locations(self):
+    def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
         self.distance_to_exit_label.y = config_data.window_height - self.stat_height;
         for index, (display_element, player) in enumerate(self.player_name_display):
@@ -84,10 +84,9 @@ def update_elements_locations(self):
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 6 - self.stat_height * (
                         index * self.number_of_stats)
 
-
-def update_paths(self):
-    for index in range(len(config_data.player_data)):
-        self.player_path_display[index][0].text = self.wrap_text(str(global_game_data.graph_paths[index]))
+    def update_paths(self):
+        for index in range(len(config_data.player_data)):
+            self.player_path_display[index][0].text = self.wrap_text(str(global_game_data.graph_paths[index]))
 
     def update_distance_to_exit(self):
         start_x = graph_data.graph_data[global_game_data.current_graph_index][0][0][0]
@@ -98,8 +97,8 @@ def update_paths(self):
         self.distance_to_exit_label.text = 'Direct Distance To Exit : ' + "{0:.0f}".format(self.distance_to_exit)
 
     def wrap_text(self, input):
-     wrapped_text = (input[:44] + ', ...]') if len(input) > 44 else input
-     return wrapped_text
+         wrapped_text = (input[:44] + ', ...]') if len(input) > 44 else input
+         return wrapped_text
 
     def update_distance_traveled(self):
         for display_element, player_configuration_info in self.player_traveled_display:

@@ -19,7 +19,7 @@ def get_test_path():
 
 def get_random_path():
     assert graph_data.graph_data, "graph is empty"
-    graph = graph_data.graph_data[random.rand(0, 6)]
+    graph = global_game_data.graph_paths
 
     start_node = 0
     exit_node = len(graph) - 1
@@ -41,7 +41,7 @@ def get_random_path():
 
 
 def get_dfs_path():
-    graph = graph_data.graph_data[random.rand(0, 6)]
+    graph = global_game_data.graph_paths
     start_node = 0
     exit_node = len(graph) - 1
 
@@ -55,11 +55,28 @@ def get_dfs_path():
                     return result
         return None
 
-    return dfs(start_node, [start_node])
+    path_to_target = dfs(start_node, [start_node])
+    if not path_to_target or path_to_target[-1] != global_game_data.target_node:
+        return None  # No valid path to target
+
+    path_to_exit = dfs(global_game_data.target_node, [global_game_data.target_node])
+    if not path_to_exit or path_to_exit[-1] != exit_node:
+        return None
+
+    full_path = path_to_target[:-1] + path_to_exit
+    assert global_game_data.target_node in full_path, "failed"
+    assert full_path[-1] == exit_node, "failed"
+    for i in range(len(full_path) - 1):
+        current_node = full_path[i]
+        next_node = full_path[i + 1]
+        assert next_node in graph[current_node][
+            1], f" failed:{current_node}{next_node}."
+
+    return full_path
 
 
 def get_bfs_path():
-    graph = graph_data.graph_data[random.rand(0, 6)]
+    graph = global_game_data.graph_paths
     start_node = 0
     exit_node = len(graph) - 1
     queue = deque([[start_node]])
@@ -69,17 +86,56 @@ def get_bfs_path():
         path = queue.popleft()
         current = path[-1]
 
-        if current == exit_node:
-            return path
+        # Check if we've reached the target node
+        if current == global_game_data.target_node:
+            path_to_target = path
+            break
 
         if current not in visited:
             visited.add(current)
-            for neighbor in graph[current][1]:
-                new_path = list(path)
-                new_path.append(neighbor)
-                queue.append(new_path)
 
-    return None
+            for neighbor in graph[current][1]:
+                if neighbor not in visited:
+                    new_path = list(path)
+                    new_path.append(neighbor)
+                    queue.append(new_path)
+    else:
+        return None
+
+    queue = deque([[global_game_data.target_node]])
+    visited = set()
+
+    while queue:
+        path = queue.popleft()
+        current = path[-1]
+
+        if current == exit_node:
+            path_to_exit = path
+            break
+
+        if current not in visited:
+            visited.add(current)
+
+            for neighbor in graph[current][1]:
+                if neighbor not in visited:
+                    new_path = list(path)
+                    new_path.append(neighbor)
+                    queue.append(new_path)
+    else:
+        return None
+
+    full_path = path_to_target[:-1] + path_to_exit
+    assert global_game_data.target_node in full_path, "failed"
+    assert full_path[-1] == exit_node, "failed"
+    for i in range(len(full_path) - 1):
+        current_node = full_path[i]
+        next_node = full_path[i + 1]
+        assert next_node in graph[current_node][
+            1], f" failed:{current_node}{next_node}."
+
+    return full_path
+
+
 
 
 def get_dijkstra_path():
