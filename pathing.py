@@ -82,15 +82,9 @@ def get_dfs_path():
         return None
 
     path_to_exit = dfs_exit(target_node, [target_node])
-    print(path_to_exit)
 
-    # Concatenate the two paths (removing duplicate target node from the second path)
     full_path = path_to_target[:-1] + path_to_exit
-    print(full_path)
-    # Assuming update_scoreboard() updates the scoreboard with necessary metrics
-    # Pass the full path and algorithm type to scoreboard function
 
-    # assert post condition that target node is hit during full path
     assert target_node in full_path, "failed1"
     # assert post condition that they hit exit as the last node
     for i in range(len(full_path) - 1):
@@ -99,6 +93,7 @@ def get_dfs_path():
         assert next_node in graph[current_node][
             1], f" failed2:{current_node}{next_node}."
     full_path.remove(0)
+    print(full_path)
     return full_path
 
 
