@@ -87,6 +87,7 @@ class Scoreboard:
 
     def update_paths(self):
         for index in range(len(config_data.player_data)):
+
             self.player_path_display[index][0].text = self.wrap_text(str(global_game_data.graph_paths[index]))
 
     def update_distance_to_exit(self):
@@ -121,16 +122,14 @@ class Scoreboard:
     def determine_winner(self):
         min_distance = float('inf')
         winner_name = None
+        for display_element, player_configuration_info in self.player_objectives_display:
+            for player_object in global_game_data.player_objects:
+                total_distance = player_object.distance_traveled
+                if total_distance < min_distance:
+                    min_distance = total_distance
+                    winner_name = player_object.player_config_data[0]  # Get player name
 
-        for player_object in global_game_data.player_objects:
-            if player_object.is_test_player:  # Skip the test player
-                continue
-            total_distance = player_object.distance_traveled
-            if total_distance < min_distance:
-                min_distance = total_distance
-                winner_name = player_object.player_config_data[0]  # Get player name
-
-        self.winner_display.text = f"Winner: {winner_name} with {min_distance:.0f} distance"
+                    display_element.text = f"Winner: {winner_name} with {min_distance:.0f} distance"
     def update_scoreboard(self):
         self.update_elements_locations()
         self.update_paths()

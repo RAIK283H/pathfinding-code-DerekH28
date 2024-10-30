@@ -44,10 +44,9 @@ class TestPathFinding(unittest.TestCase):
         self.assertEqual(path, expected_path, "DFS path should hit target node 1 before reaching exit.")
 
     @patch('global_game_data.graph_paths', [
-        # Mock graph with (x, y) coordinates and neighbor indices
-        [(0, 0), [1]],  # Node (0,0) with neighbor [1]
-        [(200, -200), [0, 2]],  # Node (200,-200) with neighbors [0, 2]
-        [(200, -400), [1]]  # Node (200,-400) with neighbor [1]
+        [(0, 0), [1]],
+        [(200, -200), [0, 2]],
+        [(200, -400), [1]]
     ])
     @patch('global_game_data.target_node', 1)
     def test_bfs_path(self):
