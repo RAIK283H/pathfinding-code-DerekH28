@@ -45,7 +45,7 @@ def is_hamiltonian_cycle(path,graph):
 
 def find_hamiltonian_cycles(graph):
 
-        n = len(graph) - 1  
+        n = len(graph) - 1
         hamiltonian_cycles = []
 
         for perm in stj(n):
@@ -85,7 +85,46 @@ def find_optimal_hamiltonian_cycles(graph):
 
     return optimal_cycles, min_distance
 
+def is_clique(graph, subset):
+    for i in range(len(subset)):
+        for j in range(i + 1, len(subset)):
+            if subset[j] not in graph[subset[i]][1]:
+                return False
+    return True
+
+def generate_subsets(nodes, index=0, current_subset=None, all_subsets=None):
+    if current_subset is None:
+        current_subset = []
+    if all_subsets is None:
+        all_subsets = []
+
+    # Base case: if we've considered all nodes
+    if index == len(nodes):
+        all_subsets.append(current_subset.copy())
+        return all_subsets
+
+    # Recursive case: include or exclude the current node
+    generate_subsets(nodes, index + 1, current_subset, all_subsets)  # Exclude current node
+    current_subset.append(nodes[index])  # Include current node
+    generate_subsets(nodes, index + 1, current_subset, all_subsets)  # Recurse
+    current_subset.pop()  # Backtrack
+
+    return all_subsets
+
+def find_largest_clique(graph):
+    nodes = list(range(1, len(graph) - 1))  # Exclude start (0) and end nodes (n)
+    all_subsets = generate_subsets(nodes)
+    largest_clique = []
+
+    for subset in all_subsets:
+        if is_clique(graph, subset) and len(subset) > len(largest_clique):
+            largest_clique = subset
+
+    return largest_clique
+
 
 if __name__ == '__main__':
     for graph in graph_data:
         print(find_hamiltonian_cycles(graph))
+        print(find_optimal_hamiltonian_cycles(graph))
+        print(find_largest_clique(graph))
