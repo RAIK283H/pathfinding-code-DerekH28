@@ -121,7 +121,6 @@ class Scoreboard:
 
     def determine_winner(self):
         min_distance = float('inf')
-        winner_name = None
         for display_element, player_configuration_info in self.player_objectives_display:
             for player_object in global_game_data.player_objects:
                 total_distance = player_object.distance_traveled

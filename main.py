@@ -7,6 +7,7 @@ from scoreboard import Scoreboard
 from graph import Graph
 from player_object import Player
 import random
+import permutations
 
 # Create Viewing Window
 window = pyglet.window.Window(width=config_data.window_width, height=config_data.window_height,
@@ -96,3 +97,5 @@ def change_graph():
 if __name__ == '__main__':
     pyglet.clock.schedule_interval(update, 1 / 120.0)
     pyglet.app.run()
+
+
