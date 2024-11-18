@@ -1,3 +1,5 @@
+import heapq
+
 import graph_data
 import global_game_data
 from numpy import random
@@ -10,7 +12,7 @@ def set_current_graph_paths():
     global_game_data.graph_paths.append(get_random_path())
     global_game_data.graph_paths.append(get_dfs_path())
     global_game_data.graph_paths.append(get_bfs_path())
-    #global_game_data.graph_paths.append(get_dijkstra_path())
+    global_game_data.graph_paths.append(get_dijkstra_path())
 
 
 def get_test_path():
@@ -92,7 +94,6 @@ def get_dfs_path():
         next_node = full_path[i + 1]
         assert next_node in graph[current_node][
             1], f" failed2:{current_node}{next_node}."
-    full_path.remove(0)
     print(full_path)
     return full_path
 
@@ -140,30 +141,47 @@ def get_bfs_path():
 
     # Concatenate the paths, removing the duplicate target node from the second path
     full_path = path_to_target[:-1] + path_to_exit
-    full_path.remove(0)
     print(full_path)
     return full_path
 
 
 
 def get_dijkstra_path():
-    # graph = graph_data.graph_data[random.rand(0, 6)]
-    # start_node = 0
-    # exit_node = len(graph) - 1
-    #
-    # queue = deque([(start_node, [start_node], 0)])
-    # visited = set()
-    #
-    # while queue:
-    #     current, path, cost = queue.popleft()
-    #
-    #     if current == exit_node:
-    #         return path
-    #
-    #     if current not in visited:
-    #         visited.add(current)
-    #         for neighbor in graph[current][1]:
-    #             if neighbor not in visited:
-    #                 queue.append((neighbor, path + [neighbor], cost + 1))
+        graph = graph_data.graph_data[global_game_data.current_graph_index]
+        start_node = 0  # Start node
+        exit_node = len(graph) - 1  # Exit node
 
-    return None
+        def calculate_distance(point1, point2):
+            return ((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2) ** 0.5
+        # Priority queue and distance tracking
+        pq = []
+        heapq.heappush(pq,(0, start_node))
+        distances = {i: float('inf') for i in range(len(graph))}
+        distances[start_node] = 0
+        parents = {start_node: None}  # Track parents for path reconstruction
+
+        while pq:
+            current_distance, current_index = heapq.heappop(pq)
+            current_index = int(current_index)
+
+
+            # If we reached the exit node, reconstruct the path
+            if current_index == exit_node:
+                path = []
+                while current_index is not None:
+                    path.append(current_index)
+                    current_index = parents[current_index]
+                path.reverse()  # Reverse path to start from the start node
+                return path
+
+            # Explore neighbors and update distances
+            for neighbor_index in graph[current_index][1]:
+                neighbor_distance = current_distance + calculate_distance(graph[current_index][0],
+                graph[neighbor_index][0])
+
+                if neighbor_distance < distances[neighbor_index]:
+                    distances[neighbor_index] = neighbor_distance
+                    parents[neighbor_index] = current_index
+                    heapq.heappush(pq,(neighbor_distance, neighbor_index))
+
+        return None
