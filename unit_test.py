@@ -174,5 +174,81 @@ class TestPathFinding(unittest.TestCase):
         ]
         cycles = permutations.find_hamiltonian_cycles(graph)
         self.assertEqual(cycles, [], "Should find no Hamiltonian cycles in a partially connected graph")
+
+        class TestDijkstraPath(unittest.TestCase):
+            def setUp(self):
+                # Mock graph data and game data
+                global graph_data, global_game_data
+
+                class MockGraphData:
+                    graph_data = [
+                        [
+                            ((0, 0), [1, 2]),
+                            ((1, 0), [2]),
+                            ((2, 0), [])
+                        ],
+
+                        [
+                            ((0, 0), [1, 3]),
+                            ((1, 1), [2]),
+                            ((2, 2), [3]),
+                            ((3, 3), [])
+                        ]
+                    ]
+
+                class MockGlobalGameData:
+                    current_graph_index = 0
+
+                graph_data = MockGraphData()
+                global_game_data = MockGlobalGameData()
+
+            def test_simple_path(self):
+                # Test with the simple graph
+                global_game_data.current_graph_index = 0
+                expected_path = [0, 1, 2]
+                self.assertEqual(pathing.get_dijkstra_path(), expected_path)
+
+            def test_larger_graph(self):
+                # Test with a larger graph
+                global_game_data.current_graph_index = 1
+                expected_path = [0, 3]
+                self.assertEqual(pathing.get_dijkstra_path(), expected_path)
+
+            def test_no_exit_node(self):
+                # Test a graph where no exit node is reachable
+                global graph_data
+                graph_data.graph_data.append(
+                    [
+                        ((0, 0), [1]),
+                        ((1, 1), [])
+                    ]
+                )
+                global_game_data.current_graph_index = 2
+                self.assertIsNone(pathing.get_dijkstra_path())
+
+            def test_single_node_graph(self):
+                # Test a graph with only a single node (the start is also the exit)
+                global graph_data
+                graph_data.graph_data.append(
+                    [
+                        ((0, 0), [])
+                    ]
+                )
+                global_game_data.current_graph_index = 3
+                expected_path = [0]
+                self.assertEqual(pathing.get_dijkstra_path(), expected_path)
+
+            def test_disconnected_graph(self):
+                # Test a graph where nodes are disconnected
+                global graph_data
+                graph_data.graph_data.append(
+                    [
+                        ((0, 0), [1]),
+                        ((1, 1), []),
+                        ((2, 2), [])
+                    ]
+                )
+                global_game_data.current_graph_index = 4
+                self.assertIsNone(pathing.get_dijkstra_path())
 if __name__ == '__main__':
     unittest.main()
