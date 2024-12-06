@@ -2,6 +2,7 @@ import heapq
 
 import graph_data
 import global_game_data
+import f_w
 from numpy import random
 from collections import deque
 
@@ -12,7 +13,7 @@ def set_current_graph_paths():
     global_game_data.graph_paths.append(get_random_path())
     global_game_data.graph_paths.append(get_dfs_path())
     global_game_data.graph_paths.append(get_bfs_path())
-    global_game_data.graph_paths.append(get_dijkstra_path())
+    global_game_data.graph_paths.append(f_w.floyd_warshall())
 
 
 def get_test_path():
